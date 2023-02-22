@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weknow.TypesUtility.Generat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weknow.TypesUtility.Generation.SrcGen.Playground", "src-gen\Weknow.TypesUtility.Generation.SrcGen.Playground\Weknow.TypesUtility.Generation.SrcGen.Playground.csproj", "{30CFA375-5657-4F54-AF82-FB23563FD8EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weknow.TypesUtility.Contracts", "Weknow.TypesUtility.Contracts\Weknow.TypesUtility.Contracts.csproj", "{D6D9FA7B-F3B1-4DB0-9EC9-9B60479E34AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weknow.TypesUtility.Abstraction", "Weknow.TypesUtility.Abstraction\Weknow.TypesUtility.Abstraction.csproj", "{D6D9FA7B-F3B1-4DB0-9EC9-9B60479E34AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

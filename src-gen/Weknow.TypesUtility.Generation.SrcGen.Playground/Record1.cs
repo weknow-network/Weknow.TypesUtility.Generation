@@ -3,10 +3,12 @@
     [Nullable]
     internal record Record1
     {
-        public int A { get; set; }
+        public required int A { get; set; }
 
-        public string B { get; set;}
+        public required string B { get; set;}
 
         public DateTime? C { get; set;}
+
+        public string? D { get; set;}
     }
 }

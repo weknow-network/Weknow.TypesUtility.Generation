@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Weknow.TypesUtility.Contracts\Weknow.TypesUtility.Contracts.csproj" />
+    <ProjectReference Include="..\..\Weknow.TypesUtility.Abstraction\Weknow.TypesUtility.Abstraction.csproj" />
     <ProjectReference Include="..\Weknow.TypesUtility.Generation.SrcGen\Weknow.TypesUtility.Generation.SrcGen.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
 
