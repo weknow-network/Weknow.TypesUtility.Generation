@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using static Weknow.TypesUtility.HelperExtensions;
+
 namespace Weknow.TypesUtility;
 
 // TODO: [bnaya 2022-10-24] Add ctor level attribue to select the From ctor
@@ -16,14 +18,10 @@ namespace Weknow.TypesUtility;
 [Generator]
 public class PartialGenerator : IIncrementalGenerator
 {
-    private const string TARGET_ATTRIBUTE = "NullableAttribute";
-    private static readonly string TARGET_SHORT_ATTRIBUTE = "Nullable";
     private const string NEW_LINE = "\n";
 
     private const string MODIFIER_START = "Modifier";
     private readonly static Regex MODIFIER_CONVENSION = new Regex(@"Modifier\s*=\s*""(.*)""");
-    private const string SUFFIX_START = "Suffix";
-    private readonly static Regex SUFFIX_CONVENSION = new Regex(@"Suffix\s*=\s*""(.*)""");
 
     #region Initialize
 
@@ -139,7 +137,7 @@ public class PartialGenerator : IIncrementalGenerator
                 ?.Trim() ?? string.Empty;
         suffix = SUFFIX_CONVENSION.Replace(suffix, "$1");
         if (string.IsNullOrEmpty(suffix))
-            suffix = "Nullable";
+            suffix = SUFFIX_DEFAULT;
 
         if (string.IsNullOrEmpty(modifier))
             modifier = syntax.Modifiers.ToString();
@@ -184,8 +182,8 @@ public class PartialGenerator : IIncrementalGenerator
                    .Select(m =>
                    {
                        string name = m.Name;
-                       string type = m.Type.ToDisplayString();
-                       if (m.Type.NullableAnnotation != NullableAnnotation.Annotated) 
+                       string type = m.Type.GetTypeName();
+                       if (!type.EndsWith("?")) 
                        {
                            type = $"{type}?";
                        }

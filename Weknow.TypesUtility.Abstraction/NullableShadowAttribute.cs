@@ -4,7 +4,7 @@
 /// Code generation decoration of Mapping to and from dictionary
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
-public class NullableAttribute : Attribute
+public class NullableShadowAttribute : Attribute
 {
     /// <summary>
     /// Override the modifier (public, private, internal).
