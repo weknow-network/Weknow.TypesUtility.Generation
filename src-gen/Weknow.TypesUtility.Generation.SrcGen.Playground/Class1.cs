@@ -7,7 +7,7 @@ using Weknow.TypesUtility;
 
 namespace Weknow.TypesUtility.Generation.SrcGen.Playground
 {
-    [Nullable]
+    [NullableShadow]
     internal class Class1
     {
         public int A { get; set; }

@@ -6,13 +6,13 @@ namespace Weknow.TypesUtilityTests;
 
 [NullableShadow]
 [Equatable]
-internal partial record SimpleRecord
+internal partial record ComplexRecord
 {
     public required int A { get; set; }
 
     public required string B { get; set;}
 
-    public DateTime? C { get; set;}
+    public ComplexRecord? C { get; set;}
 
-    public string? D { get; set;}
+    public ComplexRecord[] D { get; set;}
 }

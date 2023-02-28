@@ -1,6 +1,6 @@
 ﻿namespace Weknow.TypesUtility.Generation.SrcGen.Playground
 {
-    [Nullable]
+    [NullableShadow]
     internal record Record3: Record1
     {
         public int Q { get; set; }

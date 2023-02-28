@@ -8,8 +8,8 @@ using Weknow.TypesUtility;
 
 namespace Weknow.TypesUtility.Generation.SrcGen.Playground
 {
-    [Nullable(Modifier = "public partial", Suffix = "X")]
-    internal class Class2
+    [NullableShadow(Modifier = "internal partial", Suffix = "X")]
+    public class Class2
     {
         public int A { get; set; }
 

@@ -154,7 +154,8 @@ public class PartialGenerator : IIncrementalGenerator
         string? nsCandidate = symbol.ContainingNamespace.ToString();
         string ns = nsCandidate != null ? $"namespace {nsCandidate};{NEW_LINE}" : "";
 
-        var props = (IPropertySymbol[])(hierarchy.SelectMany(s => s.GetMembers().Select(m => m as IPropertySymbol).Where(m => m != null)).ToArray());
+        IPropertySymbol[] props = (IPropertySymbol[])(hierarchy.SelectMany(s => s.GetMembers().Select(m => m as IPropertySymbol).Where(m => m != null)).ToArray());
+        IPropertySymbol[] publicProps = props.Where(m => m.DeclaredAccessibility == Accessibility.Public).ToArray();
         ImmutableArray<IParameterSymbol> parameters = symbol.Constructors
             .Where(m => !(m.Parameters.Length == 1 && m.Parameters[0].Type.Name == cls))
             .Aggregate((acc, c) =>
@@ -165,6 +166,8 @@ public class PartialGenerator : IIncrementalGenerator
                     return c;
                 return acc;
             })?.Parameters ?? ImmutableArray<IParameterSymbol>.Empty;
+        Dictionary<string, object?> paramsKeys = parameters.ToDictionary(m => m.Name, m => null as object);
+        IPropertySymbol[] propsExcludeParams = publicProps.Where(m => !paramsKeys.ContainsKey(m.Name)).ToArray();
 
 
         StringBuilder sbMapper = new();
@@ -177,8 +180,67 @@ public class PartialGenerator : IIncrementalGenerator
 [System.CodeDom.Compiler.GeneratedCode(""Weknow.TypesUtility.Generation"", ""1.0.0"")]
 {modifier} {typeKind} {cls!}{suffix}
 {{
+    #region Copy Ctor
+
+    private {cls!}{suffix}({cls!} copy)
+    {{
 {string.Join(NEW_LINE,
-            props.Where(m => m.DeclaredAccessibility == Accessibility.Public)
+            publicProps
+                   .Select(m =>
+                   {
+                       string name = m.Name;
+                       string fromCopy = $"copy?.{name}";
+                       return $"\t\t{name} = {m.Type.CastExplicit(fromCopy, true)};";
+                   }))}
+    }}
+
+    #endregion // Copy Ctor
+
+    #region Operator overloads
+
+    /// <summary>
+    /// Performs an implicit conversion.
+    /// </summary>
+    /// <param name=""source"">The source</param>
+    /// <returns>
+    /// The result of the conversion.
+    /// </returns>
+    public static implicit operator {cls!}{suffix}({cls!} source) =>  source == null ? null : new {cls!}{suffix}(source);
+    /// <summary>
+    /// Performs an implicit conversion.
+    /// </summary>
+    /// <param name=""copy"">The copy from data</param>
+    /// <returns>
+    /// The result of the conversion.
+    /// </returns>
+    public static explicit operator {cls!}({cls!}{suffix} copy) 
+    {{
+        if(copy == null)
+            return null;
+        return new {cls!}(
+            {string.Join(", ", parameters.Select(m =>
+                   {
+                       string name = m.Name;
+                       string fromCopy = $"copy?.{name}";
+                       string cast = m.Type.CastExplicit(fromCopy);
+                       return cast;
+                   }))})
+            {{
+{string.Join($",{NEW_LINE}",
+            propsExcludeParams
+                   .Select(m =>
+                   {
+                       string name = m.Name;
+                       string fromCopy = $"copy?.{name}";
+                       string cast = m.Type.CastExplicit(fromCopy);
+                       return $"\t\t\t\t\t{name} = {cast}";
+                   }))}
+            }};
+    }}
+
+    #endregion // Operator overloads
+{string.Join(NEW_LINE,
+            publicProps
                    .Select(m =>
                    {
                        string name = m.Name;
